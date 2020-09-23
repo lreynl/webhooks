@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Site</title>
+
+    <!--link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	-->
+    <style>
+        body { padding-top:50px; 
+               font-family:'courier'; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="jumbotron">
+            <div id="list">res.sendFile() Works!</div>
+        </div>
+    </div>
+
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+// Create WebSocket connection.
+
+const url = 'ws://localhost:8000/';
+const socket = new WebSocket(url);
+
+
+// Connection opened
+socket.addEventListener('open', function (event) {
+  console.log('Connected to ws server');
+});
+
+// Listen for messages
+socket.addEventListener('message', function (event) {
+  console.log('Message from server: ', event.data);
+  $('#list').append(`<div>${event.data}</div>`);
+});
+</script>

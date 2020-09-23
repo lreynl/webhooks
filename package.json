@@ -1,0 +1,27 @@
+{
+  "name": "webhooks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.26.12",
+    "nodemon": "^2.0.4",
+    "ui": "browser-sync start --proxy=localhost:8000 --files='**/*.css, **/*.pug, **/*.js' --ignore=node_modules --reload-delay 10 --no-ui --no-notify"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "events": "^3.2.0",
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0",
+    "jquery": "^3.5.1",
+    "mongodb": "^3.6.2",
+    "pug": "^3.0.0",
+    "ws": "^7.3.1"
+  }
+}
