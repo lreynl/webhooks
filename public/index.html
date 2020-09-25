@@ -1,42 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sample Site</title>
-
-    <!--link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-	-->
-    <style>
-        body { padding-top:50px; 
-               font-family:'courier'; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Webhook receiver</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <style>
+    body { padding-top:50px; 
+           font-family:'courier'; }
+  </style>
 </head>
 <body>
-
-    <div class="container">
-        <div class="jumbotron">
-            <div id="list">res.sendFile() Works!</div>
-        </div>
+  <div class="container">
+    <div class="jumbotron">
+      <button id="db">Load DB</button>
+        <div id="list">mongoDB keys will appear above when webhooks are received</div>
     </div>
-
+  </div>
 </body>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-// Create WebSocket connection.
 
 const url = 'ws://localhost:8000/';
 const socket = new WebSocket(url);
+const loadDb = data => {
+  data.forEach(d => {
+    $('#list').prepend(`<div class='link'>
+                          <a href='#'>${d._id}</a>
+      		            </div>
+      		            <div style="display:none">
+      		              ${JSON.stringify(d)}
+                        </div>`);  		
+  });
+}
 
+$('.jumbotron').on('click', e => {
+  e.preventDefault();
+  if (e.target.nodeName == 'A') {
+    $(e.target).parent().next().toggle();
+  }
+});
 
-// Connection opened
+$('#db').on('click', e => {
+  $(e.target).hide();
+  socket.send("hello from browser");
+});
+
 socket.addEventListener('open', function (event) {
   console.log('Connected to ws server');
 });
 
-// Listen for messages
 socket.addEventListener('message', function (event) {
-  console.log('Message from server: ', event.data);
-  $('#list').append(`<div>${event.data}</div>`);
+  let data = JSON.parse(event.data);
+  if (Array.isArray(data)) {
+  	loadDb(data);
+  	return;
+  }
+  console.log('Message from server: ', data);
+  $('#list').prepend(`<div class='link'>
+                        <a href='#'>${data._id}</a>
+                      </div>
+                      <div style="display:none">
+                        ${event.data}
+                      </div>`);
 });
+
 </script>
